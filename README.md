@@ -13,5 +13,7 @@ This is a simple [React.js](https://react.dev/)  project showcasing a subscripti
 
 ## Overview 💻
 
-![Gif](./public/overview-form.gif)
+
+<img src="./public/overview-form.gif" width="400px">
+
 
