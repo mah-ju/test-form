@@ -2,40 +2,52 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { TriangleAlert } from "lucide-react";
+import { useEffect } from "react";
 
 export const Form = ({ openModal, setFormData }) => {
   const schema = yup.object().shape({
     name: yup.string().required("Name is required!"),
     email: yup.string().required("Email is required!").email("Invalid email!"),
-    password: yup.string().min(6, "At least 6 characters!").max(10, "Maximum of 10 characters!").required("Password is required"),
-    confirmPassword: yup.string().oneOf([yup.ref("password"), null], "Passwords don't match!").required("Confirm password!"),
+    password: yup
+      .string()
+      .min(6, "At least 6 characters!")
+      .max(10, "Maximum of 10 characters!")
+      .required("Password is required"),
+    confirmPassword: yup
+      .string()
+      .oneOf([yup.ref("password"), null], "Passwords don't match!")
+      .required("Confirm password!"),
   });
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    reset,
+    formState: { errors, isSubmitSuccessful },
   } = useForm({ resolver: yupResolver(schema) });
 
   const submitForm = (data) => {
     console.log(data);
     setFormData(data);
     openModal(data);
-  
   };
 
-  const handleKeyDown = (e) =>{
-
-    if(e.key === "Enter"){
-      handleSubmit(submitForm)
-    
+  useEffect((data) => {
+    if (isSubmitSuccessful) {
+      reset(data);
     }
-  }
+  });
 
- 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSubmit(submitForm);
+    }
+  };
+
   return (
     <form
-      onSubmit={handleSubmit(submitForm)} onKeyDown={handleKeyDown}
+      onSubmit={handleSubmit(submitForm)}
+      onKeyDown={handleKeyDown}
       className="bg-lime-300/60 w-[75%] lg:w-[40%] py-10 flex flex-col justify-center rounded-lg"
     >
       <h2 className="text-3xl text-center md:text-5xl pb-5 px-2 md:px-3 text-purple-950">
@@ -50,12 +62,12 @@ export const Form = ({ openModal, setFormData }) => {
             {...register("name")}
           ></input>
           <div>
-            {errors.name && 
+            {errors.name && (
               <p className="text-red-600 inline-flex items-baseline gap-1">
                 <TriangleAlert className="self-center" size={15} />
                 {errors.name.message}
               </p>
-            }
+            )}
           </div>
         </div>
         <div>
@@ -66,12 +78,12 @@ export const Form = ({ openModal, setFormData }) => {
             {...register("email")}
           ></input>
           <div>
-            {errors.email && 
+            {errors.email && (
               <p className="text-red-600 inline-flex items-baseline gap-1">
                 <TriangleAlert className="self-center" size={15} />
                 {errors.email.message}
               </p>
-            }
+            )}
           </div>
         </div>
         <div>
@@ -83,12 +95,12 @@ export const Form = ({ openModal, setFormData }) => {
           ></input>
 
           <div>
-            {errors.password && 
+            {errors.password && (
               <p className="text-red-600 inline-flex items-baseline gap-1">
                 <TriangleAlert className="self-center" size={15} />
                 {errors.password.message}
               </p>
-            }
+            )}
           </div>
         </div>
         <div>
@@ -99,12 +111,12 @@ export const Form = ({ openModal, setFormData }) => {
             {...register("confirmPassword")}
           ></input>
           <div>
-            {errors.confirmPassword && 
+            {errors.confirmPassword && (
               <p className="text-red-600 inline-flex items-baseline gap-1">
                 <TriangleAlert className="self-center" size={15} />
                 {errors.confirmPassword.message}
               </p>
-            }
+            )}
           </div>
         </div>
         <div className="pt-3">

@@ -21,9 +21,6 @@ export default function Home() {
 
   function closeModal() {
     setIsModalOpen(false);
-   
-
-   
   }
 
  
